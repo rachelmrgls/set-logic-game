@@ -31,7 +31,7 @@ A solo, interactive game of Set, created in java.
 	- If you give up, try pressing the 'Q' key to quit the current game and start a new one.
 
 # Examples 
-- ![image1]("examples/Set 1.png")
+- ![image1](examples/Set 1.png)
 
 
 # Points

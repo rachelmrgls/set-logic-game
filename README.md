@@ -37,8 +37,14 @@ A solo, interactive game of Set, created in java.
 # Examples 
 - This shows a set where the three cards have the same color, number, and pattern, with unique shape for each. It would be worth 1 point.
 ![image1](examples/Set 1.png)
+
+
+
 - This shows a set where the three cards have the same pattern, with unique shape, color, and number for each. It would be worth 3 points.
 ![image2](examples/Set 3.png)
+
+
+
 - This shows a set where the three cards have unique shape, color, number, and pattern for each. It would be worth 4 points.
 ![image3](examples/Set 4.png)
 

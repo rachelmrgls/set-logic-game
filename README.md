@@ -30,10 +30,16 @@ A solo, interactive game of Set, created in java.
 	- If you cannot seem to find a set in the gameboard shown, try pressing the 'R' key to remove a column at random.
 	- If you give up, try pressing the 'Q' key to quit the current game and start a new one.
 
-# Examples 
-- ![image1](examples/Set 1.png)
-
-
 # Points
-- In my solitaire version of this classic game, points are calculated as follows:
-- One point is awarded for each uniquness among the features of the cards.
+- In my solitaire version of this classic game, points are calculated with one point is awarded for each uniquness among the features of the cards in the SET.
+- Since each of the 81 cards in the deck is unique, a SET must have at least one unique feature among the cards. Thus, points per SET range from 1-4.
+
+# Examples 
+- This shows a set where the three cards have the same color, number, and pattern, with unique shape for each. It would be worth 1 point.
+![image1](examples/Set 1.png)
+- This shows a set where the three cards have the same pattern, with unique shape, color, and number for each. It would be worth 3 points.
+![image2](examples/Set 3.png)
+- This shows a set where the three cards have unique shape, color, number, and pattern for each. It would be worth 4 points.
+![image3](examples/Set 4.png)
+
+

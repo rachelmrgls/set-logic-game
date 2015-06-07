@@ -43,15 +43,12 @@ public class SetBoard {
 	public boolean reload;
 
 	/*
-	*  Constructor. Makes a new board. New deck if neccessary. Deals the original gameboard.
+	*  Constructor. Makes a new board with new deck. Deals the original gameboard.
 	*  Ensures that no cards are considered to be selected. Resets the user's score.
 	*/
 	public SetBoard() {
 		board = new SetCard[3][4];
-		if (deck == null) 
-			deck = new SetDeck();
-		else 
-			deck.shuffle();
+		deck = new SetDeck();
 		for (int i = 0; i < board.length; i++) {
 			for (int j = 0; j < board[0].length; j++) {
 				board[i][j] = deck.dealCard();
@@ -242,6 +239,8 @@ public class SetBoard {
 		row2 = 1;
 		row3 = 2;
 
+		SetCard[] toRemove = {board[0][col],board[1][col], board[2][col]};
+		deck.shiftDeck(toRemove);
 		redeal();
 	}
 	/*

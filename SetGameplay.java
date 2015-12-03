@@ -318,7 +318,7 @@ public class SetGameplay {
         // write all of the text information
         StdDraw.setPenColor(StdDraw.BLACK);
         StdDraw.textRight(760.0, 30.0, "Press 'q' to quit");
-        StdDraw.textLeft(20.0, 30.0, "Press 'r' to remove a column");
+        //StdDraw.textLeft(20.0, 30.0, "Press 'r' to remove a column");
         StdDraw.textRight(760.0, 480.0, "Score: " + board.getScore());
         StdDraw.textLeft(20.0, 480.0, "Cards remaining: " + board.cardsLeft());
         StdDraw.setFont(new Font("Times", Font.PLAIN, 50));
@@ -330,6 +330,11 @@ public class SetGameplay {
         StdDraw.show(400);
         if (board.falseSet) {
             board.clearSet();
+            refreshBoard();
+        }
+        if (board.endGame) {
+            endGame();
+            board = new SetBoard();
             refreshBoard();
         }
         if (board.possibleSets == 0) {

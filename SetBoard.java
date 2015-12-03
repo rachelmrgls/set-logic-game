@@ -44,6 +44,7 @@ public class SetBoard {
 	public boolean falseSet;
 
 	public int possibleSets;
+	public boolean endGame;
 
 	/*
 	*  Constructor. Makes a new board with new deck. Deals the original gameboard.
@@ -298,5 +299,8 @@ public class SetBoard {
 		col2 = -1;
 		col3 = -1;
 		findPossibleSets();
+		if (cardsLeft() == 0 && possibleSets == 0) {
+			endGame = true;
+		}
 	}
 }

@@ -30,6 +30,7 @@ public class SetGameplay {
     public static final Color PURPLE = new Color(100, 0, 127);
     public static final Color GREEN = new Color(35, 168, 61);
     public static final Color RED = Color.RED;
+    public static final Color BACK_PURPLE = new Color(198, 167, 214);
 
     /* 
     *  Main function: runs the game. 
@@ -49,11 +50,15 @@ public class SetGameplay {
         
         // show the original board
         refreshBoard();
+        
+        boolean mouseClicked = false;
 
         // loop forever (aka, until the game is actively quit)
         while (true) {
-            // check to see if the user has pressed the mouse.
-            if (StdDraw.mousePressed()) {
+            // check to see if the user has done a full mouse click.
+            if (StdDraw.mousePressed()) { mouseClicked = true; }
+            if (!StdDraw.mousePressed() && mouseClicked) {
+                mouseClicked = false;
                 // get mouse coordinates
                 int x = (int) StdDraw.mouseX();
                 int y = (int) StdDraw.mouseY();
@@ -167,6 +172,7 @@ public class SetGameplay {
             while ((line = br.readLine()) != null) {
                 if (count == 10) { break;}
                 String[] score = line.split("\t");
+                int val = Integer.parseInt(score[1]);
                 if (board.getScore() > val) {
                     newScores.append(name.toString() + "\t" + board.getScore() + "\n");
                     count++;
@@ -228,33 +234,40 @@ public class SetGameplay {
     *  (mouse interaction). Color its border blue. Check if a set is formed. If so,
     *  reload the display. 
     */
+    public static void highlightCards() {
+
+    }
+
     public static void selectCard() {
         // if this action selected the card.
         //BOOK_LIGHT_BLUE
-        if (!board.isCardSelected(board.hovRow, board.hovCol)) {
-            StdDraw.setPenRadius(.004);
+        /*if (!board.isCardSelected(board.hovRow, board.hovCol)) {
+            StdDraw.setPenRadius(.009);
             StdDraw.setPenColor(new Color(24, 127, 235));
         }
         // if this action unselected the card.
         else {
+            StdDraw.setPenRadius(.004);
             StdDraw.setPenColor(StdDraw.BLACK);
-        }
+        }*/
         // select the corresponding card on the SetBoard.
         board.cardSelect(board.hovRow, board.hovCol);
 
         // draw the border of the selected card (in the appropriate color)
-        StdDraw.rectangle(25.0 + (CARD_SPACING + CARD_WIDTH) * board.hovCol + CARD_WIDTH/2, 
+        /*StdDraw.rectangle(25.0 + (CARD_SPACING + CARD_WIDTH) * board.hovCol + CARD_WIDTH/2, 
                           70.0 + (CARD_SPACING + CARD_HEIGHT) * board.hovRow + CARD_HEIGHT/2,
                           CARD_WIDTH/2, CARD_HEIGHT/2);
         // if keyboard interactions are enabled, briefly show its new color, then show 
         // hovering effect again.
         StdDraw.show(300);
         StdDraw.setPenRadius(.004);
-
+        */
         switchCard(board.hovRow, board.hovCol);
 
+        refreshBoard();
         // if a set was made, refresh the display.
         if (board.reload) {
+            StdDraw.clear();
             refreshBoard();
             board.reload = false;
         }
@@ -263,9 +276,9 @@ public class SetGameplay {
     *  Wipes the current display, and reloads all content. 
     */
     public static void refreshBoard() {
-        StdDraw.clear();
+        //StdDraw.clear();
         // draw the background
-        StdDraw.setPenColor(new Color(PURPLE.getRed(), PURPLE.getGreen(), PURPLE.getBlue(), 70));
+        StdDraw.setPenColor(BACK_PURPLE);
         StdDraw.filledRectangle(10, 0, 850, 600);
 
         // draw the board, with all of the cards.
@@ -278,9 +291,17 @@ public class SetGameplay {
                 // draw the card
                 StdDraw.setPenColor(StdDraw.WHITE);
                 StdDraw.filledRectangle(x, y, CARD_WIDTH/2, CARD_HEIGHT/2);
-                StdDraw.setPenColor(StdDraw.BLACK);
+                
+                if (board.isCardSelected(j, i)) {
+                    StdDraw.setPenRadius(.009);
+                    StdDraw.setPenColor(new Color(24, 127, 235));
+                }
+                else {
+                    StdDraw.setPenColor(StdDraw.BLACK);
+                }
                 StdDraw.rectangle(x, y, CARD_WIDTH/2, CARD_HEIGHT/2);
 
+                StdDraw.setPenRadius(.004);
                 // draw the sumbols on the card (according to the characteristics of the SetCard)
                 SetCard card = board.getCard(j, i);
                 // if there is no card at that position, move on to the next card to be drawn.
@@ -316,6 +337,6 @@ public class SetGameplay {
         StdDraw.setFont(new Font(StdDraw.getFont().getName(), Font.PLAIN, 18));
         StdDraw.text(380.0, 15.0, "by Rachel Margulies");
         StdDraw.setFont();
-        StdDraw.show();
+        StdDraw.show(20);
     }
 }

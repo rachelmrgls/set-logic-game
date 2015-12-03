@@ -43,6 +43,8 @@ public class SetBoard {
 	public boolean reload;
 	public boolean falseSet;
 
+	public int possibleSets;
+
 	/*
 	*  Constructor. Makes a new board with new deck. Deals the original gameboard.
 	*  Ensures that no cards are considered to be selected. Resets the user's score.
@@ -68,6 +70,7 @@ public class SetBoard {
 		score = 0;
 
 		falseSet = false;
+		findPossibleSets();
 	}
 	/*
 	*  Returns the SetCard at the given row and column in the board.
@@ -136,7 +139,10 @@ public class SetBoard {
 			row3 = row;
 			col3 = col;
 			// check if the set is valid (add points if so, and redeal).
-			if (checkSet()) {
+			if (board[row1][col1] != null && 
+					board[row2][col2] != null && 
+					board[row3][col3] != null &&
+					checkSet(board[row1][col1], board[row2][col2], board[row3][col3], true)) {
 				redeal();
 			}
 			// if the set is not valid, unselect all cards that were being considered.
@@ -152,12 +158,7 @@ public class SetBoard {
 	*  tally the score (1 point for each uniqueness among the cards --> 1-4 possible points for a
 	*  given set).
 	*/
-	private boolean checkSet() {
-		// get the SetCards corresponding to the selected cards on the board.
-		SetCard c1 = board[row1][col1];
-		SetCard c2 = board[row2][col2];
-		SetCard c3 = board[row3][col3];
-
+	private boolean checkSet(SetCard c1, SetCard c2, SetCard c3, boolean doScore) {
 		/* calculate if the characteristics of the three cards allow it to be a valid set. 
 		*  Since shape, color, and texture each are each assigned 0, 1, 2, I use the following fact
 		*  for each of the characteristics (shape as example) the sum can take values between 0-6:
@@ -215,13 +216,44 @@ public class SetBoard {
         }
 
         // a point for each type of difference between the 3 cards (point range, 1-4)
-        if (c1.getShape() != c2.getShape()) score++;
-        if (c1.getColor() != c2.getColor()) score++;
-        if (c1.getTexture() != c2.getTexture()) score++;
-        if (c1.getValue() != c2.getValue()) score++;
+        if (doScore && c1.getShape() != c2.getShape()) score++;
+        if (doScore && c1.getColor() != c2.getColor()) score++;
+        if (doScore && c1.getTexture() != c2.getTexture()) score++;
+        if (doScore && c1.getValue() != c2.getValue()) score++;
 
         return true;
 	}
+
+
+	
+	private void findPossibleSets() {
+		possibleSets = 0;
+		SetCard[] lineboard = new SetCard[12];
+		for (int i = 0; i < board.length; i++) {
+			for (int j = 0; j < board[0].length; j++) {
+				//System.out.println((i * board.length));
+				lineboard[(i * board.length) + j] = board[i][j];
+			}
+		}
+		for (int i = 0; i < lineboard.length; i++) {
+			for (int j = i+1; j < lineboard.length; j++) {
+				for (int k = j+1; k <lineboard.length; k++) {
+					//System.out.println(i + "  " + j + "   " + k);
+					
+					if (lineboard[i] != null && 
+							lineboard[j] != null && 
+							lineboard[k] != null &&
+							checkSet(lineboard[i], lineboard[j], lineboard[k], false)) {
+						possibleSets++;
+					}
+				}
+			}
+		}
+	}
+
+	/* 
+	* Clears the invalid set from the selected cards. 
+	*/
 	public void clearSet() {
 		row1 = -1;
 		row2 = -1;
@@ -231,6 +263,7 @@ public class SetBoard {
 		col3 = -1;
 		falseSet = false;
 	}
+
 	/*
 	*  Removes and redeals a column chosen at random from the game board. Used when the user cannot
 	*  locate a set.
@@ -264,5 +297,6 @@ public class SetBoard {
 		col1 = -1;
 		col2 = -1;
 		col3 = -1;
+		findPossibleSets();
 	}
 }

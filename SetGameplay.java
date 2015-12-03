@@ -86,6 +86,16 @@ public class SetGameplay {
                     board = new SetBoard();
                     refreshBoard();
                 }
+                // show possible sets value
+                if (key == 'p') {
+                    StdDraw.setPenColor(new Color(50, 50, 50, 255));
+                    StdDraw.filledRectangle(400, 250, 150, 75);
+                    StdDraw.setPenColor(StdDraw.WHITE);
+                    StdDraw.text(400, 250, "Possible Sets: " + board.possibleSets);
+                    StdDraw.show(500);
+                    refreshBoard();
+                }
+
                 /* UNCOMMENT TO ENABLE KEYBOARD INTERACTIONS (for selecting Sets)
                 // select card
                 if (key == ' ') {
@@ -317,9 +327,19 @@ public class SetGameplay {
         StdDraw.setFont(new Font(StdDraw.getFont().getName(), Font.PLAIN, 18));
         StdDraw.text(380.0, 15.0, "by Rachel Margulies");
         StdDraw.setFont();
-        StdDraw.show(200);
+        StdDraw.show(400);
         if (board.falseSet) {
             board.clearSet();
+            refreshBoard();
+        }
+        if (board.possibleSets == 0) {
+            StdDraw.setPenColor(new Color(50, 50, 50, 255));
+            StdDraw.filledRectangle(400, 250, 175, 100);
+            StdDraw.setPenColor(StdDraw.WHITE);
+            StdDraw.text(400, 275, "No possible sets!");
+            StdDraw.text(400, 225, "Removing a column...");
+            StdDraw.show(750);
+            board.removeCol();
             refreshBoard();
         }
     }

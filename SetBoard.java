@@ -25,6 +25,7 @@ public class SetBoard {
 	private SetDeck deck;
 	private int score;  		// user's current score
 
+
 	// Location of the first selected card.
 	private int row1; 
 	private int col1;
@@ -45,6 +46,7 @@ public class SetBoard {
 
 	public int possibleSets;
 	public boolean endGame;
+	public boolean isTutorial;
 
 	/*
 	*  Constructor. Makes a new board with new deck. Deals the original gameboard.
@@ -107,6 +109,15 @@ public class SetBoard {
 		return false;
 
 	}
+
+	/*public void startTutorial() {
+		isTutorial = true;
+	}
+	public void endTutorial() {
+		isTutorial = false;
+	}*/
+
+
 	/*
 	*  Either selects the card at this position, or unselects it if it was already selected.
 	*  If 3 cards have been selected, this functions checks whether the cards form a valid set.
@@ -153,6 +164,53 @@ public class SetBoard {
 			reload = true;
 		}
 
+	}
+
+	/*
+	*  Either selects the card at this position, or unselects it if it was already selected.
+	*  If 3 cards have been selected, this functions checks whether the cards form a valid set.
+	*/
+	public SetCard[] tutorialCardSelect (int row, int col) {
+		// if this card was already selected, (and is the first card) unselect it
+		if (row1 == row && col1 == col) {
+			row1 = -1;
+			col1 = -1;
+			return null;
+		}
+		// if the first card is not set, set it
+		if (row1 == -1) {
+			row1 = row;
+			col1 = col;
+			return null;
+		}
+		// find the missing card
+		else {
+			// set the second card.
+			row2 = row;
+			col2 = col;
+			reload = true;
+			return new SetCard[] { board[row1][col1], board[row2][col2],
+														findMissingCard(board[row1][col1], board[row2][col2])};
+		}
+
+	}
+
+	/* 
+	* Given two SetCards, returns the SetCard that would complete the set.
+	* Used for tutorial mode.
+	*/
+	public SetCard findMissingCard(SetCard c1, SetCard c2) {
+		int shape = (c1.getShape() == c2.getShape()) ? c1.getShape() :  3 - c1.getShape() - c2.getShape();
+		int color = (c1.getColor() == c2.getColor()) ? c1.getColor() :  3 - c1.getColor() - c2.getColor();
+		int texture = (c1.getTexture() == c2.getTexture()) ? c1.getTexture() :  3 - c1.getTexture() - c2.getTexture();
+		int value = (c1.getValue() == c2.getValue()) ? c1.getValue() :  6 - c1.getValue() - c2.getValue();
+
+		row1 = -1;
+		col1 = -1;
+		row2 = -1;
+		col2 = -1;
+
+		return new SetCard(shape, color, texture, value);
 	}
 	/*
 	*  Checks if the selected cards form a valid set. If not, return false. If it is a valid set, 
@@ -225,8 +283,11 @@ public class SetBoard {
         return true;
 	}
 
-
-	
+	/*
+	* Goes through all of the cards on the board, and calculates how many different 
+	* sets are possible from these options. Sets are not mutually exclusive, and
+	* may include overlapping cards.
+	*/
 	private void findPossibleSets() {
 		possibleSets = 0;
 		SetCard[] lineboard = new SetCard[12];

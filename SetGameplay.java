@@ -17,6 +17,8 @@
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.KeyEvent;
+import java.io.*;
 
 public class SetGameplay {
 	private static SetBoard board;
@@ -116,15 +118,79 @@ public class SetGameplay {
     }
 
     /* 
-    *  Runs when 'q' is pressed. Shows a notice with the user's score, before 
-    *  starting a new game.
+    *  Runs when 'q' is pressed. Shows a notice with the user's score, saves it in high scores,
+    *  and then starts a new game.
     */
     public static void endGame() {
-        StdDraw.setPenColor(new Color(50, 50, 50, 230));
+        // write to file
+        StringBuilder name = new StringBuilder();
+        int dashOn = 0;
+        boolean loop = true;
+        while (loop) {
+        // scanner: enter your name (6 letter max, letters and numbers only) to save your high score. 
+            dashOn = (dashOn+1) % 4;
+            if (StdDraw.hasNextKeyTyped()) {
+                char key = StdDraw.nextKeyTyped();
+                if (key == KeyEvent.VK_ENTER) { // enter 
+                    loop = false;
+                }
+                else if (key == KeyEvent.VK_DELETE) { // delete 
+                    name.deleteCharAt(name.length()-1);
+                }
+                else if (Character.isLetterOrDigit(key) && name.length() < 6) {
+                    name.append(key+"");
+                }
+            }
+            StdDraw.setPenColor(new Color(50, 50, 50, 255));
+            StdDraw.filledRectangle(400, 250, 250, 150);
+            StdDraw.setPenColor(StdDraw.WHITE);
+            String nameS = (dashOn < 2) ? name.toString() + "_" : name.toString() + " ";
+            StdDraw.text(400, 300, "Good game! Your score was " + board.getScore() + ".");
+            StdDraw.text(400, 250, "Type your name (6 char max) and hit enter to save.");
+            StdDraw.textLeft(350, 200, nameS);
+            StdDraw.show(100);
+        }
+        File file = null;
+        try {
+            file = new File("highscores.txt");
+
+            // if file doesnt exists, then create it
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            BufferedReader br = new BufferedReader(new FileReader("highscores.txt"));
+            String line;
+            System.out.println(br.ready());
+            int count = 0;
+            boolean wrote = false;
+            StringBuilder newScores = new StringBuilder();
+            while ((line = br.readLine()) != null) {
+                if (count == 10) { break;}
+                String[] score = line.split("\t");
+                if (board.getScore() > val) {
+                    newScores.append(name.toString() + "\t" + board.getScore() + "\n");
+                    count++;
+                    wrote = true;
+                    if (count == 10) { break;}
+                }
+                newScores.append(line + "\n");
+                count++;
+            }
+            if (count < 10 && !wrote) {
+                newScores.append(name.toString() + "\t" + board.getScore() + "\n");
+            }
+            br.close();
+            BufferedWriter bw = new BufferedWriter(new FileWriter(file.getAbsoluteFile()));
+            bw.write(newScores.toString());
+            bw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        StdDraw.setPenColor(new Color(50, 50, 50, 255));
         StdDraw.filledRectangle(400, 250, 250, 150);
         StdDraw.setPenColor(StdDraw.WHITE);
-        StdDraw.text(400, 250, "You ended the game!    Your score was " + board.getScore() + ".");
-        StdDraw.show(2500);
+        StdDraw.text(400, 250, "SAVED! Starting new game....");
+        StdDraw.show(7500);
     }
     /* 
     *  CURRENTLY DISABLED. When keyboard interactions are enabled, this method

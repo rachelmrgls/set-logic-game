@@ -88,6 +88,12 @@ public class SetGameplay {
                 char key = StdDraw.nextKeyTyped();
                 // remove a random column
                 if (key == 'r') {
+                    StdDraw.setPenColor(new Color(50, 50, 50, 255));
+                    StdDraw.filledRectangle(400, 250, 170, 75);
+                    StdDraw.setPenColor(StdDraw.WHITE);
+                    StdDraw.text(400, 275, "Removing a row...");
+                    StdDraw.text(400, 225, "Minus " + board.possibleSets + " points for possible sets");
+                    StdDraw.show(500);
                     board.removeCol();
                     refreshBoard();
                 }
@@ -269,12 +275,18 @@ public class SetGameplay {
 
     public static void selectCard() {
         // select the corresponding card on the SetBoard.
+        int oldScore = board.getScore();
         board.cardSelect(board.hovRow, board.hovCol);
 
         //switchCard(board.hovRow, board.hovCol);
 
         // if a set was made, refresh the display.
         if (board.reload) {
+            StdDraw.setPenColor(new Color(50, 50, 50, 255));
+            StdDraw.filledRectangle(400, 250, 150, 75);
+            StdDraw.setPenColor(StdDraw.WHITE);
+            StdDraw.text(400, 250, "Nice one! " + (board.getScore() - oldScore) + "  points!");
+            StdDraw.show(500);
             StdDraw.clear();
             board.reload = false;
         }

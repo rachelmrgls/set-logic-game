@@ -232,20 +232,20 @@ public class SetBoard {
 		SetCard[] lineboard = new SetCard[12];
 		for (int i = 0; i < board.length; i++) {
 			for (int j = 0; j < board[0].length; j++) {
-				//System.out.println((i * board.length));
-				lineboard[(i * board.length) + j] = board[i][j];
+				//System.out.println((i +" " + j));
+				lineboard[(i * board[0].length) + j] = board[i][j];
 			}
 		}
 		for (int i = 0; i < lineboard.length; i++) {
 			for (int j = i+1; j < lineboard.length; j++) {
 				for (int k = j+1; k <lineboard.length; k++) {
-					//System.out.println(i + "  " + j + "   " + k);
 					
 					if (lineboard[i] != null && 
 							lineboard[j] != null && 
 							lineboard[k] != null &&
 							checkSet(lineboard[i], lineboard[j], lineboard[k], false)) {
 						possibleSets++;
+						//System.out.println(i + "  " + j + "   " + k);
 					}
 				}
 			}
@@ -280,6 +280,7 @@ public class SetBoard {
 		row2 = 1;
 		row3 = 2;
 
+		score -= possibleSets;
 		SetCard[] toRemove = {board[0][col],board[1][col], board[2][col]};
 		deck.shiftDeck(toRemove);
 		redeal();

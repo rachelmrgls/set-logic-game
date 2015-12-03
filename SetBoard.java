@@ -41,6 +41,7 @@ public class SetBoard {
 
 	// boolean for tracking if the displayed gameboard needs to be reloaded.
 	public boolean reload;
+	public boolean falseSet;
 
 	/*
 	*  Constructor. Makes a new board with new deck. Deals the original gameboard.
@@ -65,6 +66,8 @@ public class SetBoard {
 		hovCol = 0;
 
 		score = 0;
+
+		falseSet = false;
 	}
 	/*
 	*  Returns the SetCard at the given row and column in the board.
@@ -138,12 +141,7 @@ public class SetBoard {
 			}
 			// if the set is not valid, unselect all cards that were being considered.
 			else {
-				row1 = -1;
-				row2 = -1;
-				row3 = -1;
-				col1 = -1;
-				col2 = -1;
-				col3 = -1;
+				falseSet = true;
 			}
 			reload = true;
 		}
@@ -223,6 +221,15 @@ public class SetBoard {
         if (c1.getValue() != c2.getValue()) score++;
 
         return true;
+	}
+	public void clearSet() {
+		row1 = -1;
+		row2 = -1;
+		row3 = -1;
+		col1 = -1;
+		col2 = -1;
+		col3 = -1;
+		falseSet = false;
 	}
 	/*
 	*  Removes and redeals a column chosen at random from the game board. Used when the user cannot

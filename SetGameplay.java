@@ -165,7 +165,6 @@ public class SetGameplay {
             }
             BufferedReader br = new BufferedReader(new FileReader("highscores.txt"));
             String line;
-            System.out.println(br.ready());
             int count = 0;
             boolean wrote = false;
             StringBuilder newScores = new StringBuilder();
@@ -196,7 +195,7 @@ public class SetGameplay {
         StdDraw.filledRectangle(400, 250, 250, 150);
         StdDraw.setPenColor(StdDraw.WHITE);
         StdDraw.text(400, 250, "SAVED! Starting new game....");
-        StdDraw.show(7500);
+        StdDraw.show(750);
     }
     /* 
     *  CURRENTLY DISABLED. When keyboard interactions are enabled, this method
@@ -234,43 +233,19 @@ public class SetGameplay {
     *  (mouse interaction). Color its border blue. Check if a set is formed. If so,
     *  reload the display. 
     */
-    public static void highlightCards() {
-
-    }
 
     public static void selectCard() {
-        // if this action selected the card.
-        //BOOK_LIGHT_BLUE
-        /*if (!board.isCardSelected(board.hovRow, board.hovCol)) {
-            StdDraw.setPenRadius(.009);
-            StdDraw.setPenColor(new Color(24, 127, 235));
-        }
-        // if this action unselected the card.
-        else {
-            StdDraw.setPenRadius(.004);
-            StdDraw.setPenColor(StdDraw.BLACK);
-        }*/
         // select the corresponding card on the SetBoard.
         board.cardSelect(board.hovRow, board.hovCol);
 
-        // draw the border of the selected card (in the appropriate color)
-        /*StdDraw.rectangle(25.0 + (CARD_SPACING + CARD_WIDTH) * board.hovCol + CARD_WIDTH/2, 
-                          70.0 + (CARD_SPACING + CARD_HEIGHT) * board.hovRow + CARD_HEIGHT/2,
-                          CARD_WIDTH/2, CARD_HEIGHT/2);
-        // if keyboard interactions are enabled, briefly show its new color, then show 
-        // hovering effect again.
-        StdDraw.show(300);
-        StdDraw.setPenRadius(.004);
-        */
-        switchCard(board.hovRow, board.hovCol);
+        //switchCard(board.hovRow, board.hovCol);
 
-        refreshBoard();
         // if a set was made, refresh the display.
         if (board.reload) {
             StdDraw.clear();
-            refreshBoard();
             board.reload = false;
         }
+        refreshBoard();
     }
     /* 
     *  Wipes the current display, and reloads all content. 
@@ -294,7 +269,12 @@ public class SetGameplay {
                 
                 if (board.isCardSelected(j, i)) {
                     StdDraw.setPenRadius(.009);
-                    StdDraw.setPenColor(new Color(24, 127, 235));
+                    if (board.falseSet) {
+                        StdDraw.setPenColor(new Color(213, 0, 0));
+                    }
+                    else {
+                        StdDraw.setPenColor(new Color(24, 127, 235));
+                    }
                 }
                 else {
                     StdDraw.setPenColor(StdDraw.BLACK);
@@ -323,7 +303,7 @@ public class SetGameplay {
             }
         }
         // if keyboard interactions are enabled, this recolors the card currently being hovered on.
-        switchCard(board.hovRow, board.hovCol);
+        //switchCard(board.hovRow, board.hovCol);
 
         // write all of the text information
         StdDraw.setPenColor(StdDraw.BLACK);
@@ -337,6 +317,10 @@ public class SetGameplay {
         StdDraw.setFont(new Font(StdDraw.getFont().getName(), Font.PLAIN, 18));
         StdDraw.text(380.0, 15.0, "by Rachel Margulies");
         StdDraw.setFont();
-        StdDraw.show(20);
+        StdDraw.show(200);
+        if (board.falseSet) {
+            board.clearSet();
+            refreshBoard();
+        }
     }
 }

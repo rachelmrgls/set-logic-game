@@ -52,10 +52,21 @@ public class SetGameplay {
         refreshBoard();
         
         boolean mouseClicked = false;
+        boolean isPaused = false;
 
         // loop forever (aka, until the game is actively quit)
         while (true) {
             // check to see if the user has done a full mouse click.
+            if (isPaused) {
+                if (StdDraw.hasNextKeyTyped()) {
+                    char key = StdDraw.nextKeyTyped();
+                    if (key == 'h') {
+                        isPaused = false;
+                        refreshBoard();
+                    }
+                }
+                else { continue; }
+            }
             if (StdDraw.mousePressed()) { mouseClicked = true; }
             if (!StdDraw.mousePressed() && mouseClicked) {
                 mouseClicked = false;
@@ -95,7 +106,19 @@ public class SetGameplay {
                     StdDraw.show(500);
                     refreshBoard();
                 }
-
+                if (key == 'h') {
+                    StdDraw.setPenColor(new Color(50, 50, 50, 255));
+                    StdDraw.filledRectangle(400, 250, 250, 150);
+                    StdDraw.setPenColor(StdDraw.WHITE);
+                    StdDraw.text(400, 350, "HELP");
+                    StdDraw.text(400, 300, "Press 'p' to see how many sets are possible");
+                    StdDraw.text(400, 275, "Press 'r' to remove a row if you're stuck");
+                    StdDraw.text(400, 250, "Press 't' to for a tutorial");
+                    StdDraw.text(400, 225, "Press 'q' to quit and end the game");
+                    StdDraw.text(400, 175, "Press 'h' to resume the game");
+                    StdDraw.show(200);
+                    isPaused = true;
+                }
                 /* UNCOMMENT TO ENABLE KEYBOARD INTERACTIONS (for selecting Sets)
                 // select card
                 if (key == ' ') {
@@ -317,15 +340,15 @@ public class SetGameplay {
 
         // write all of the text information
         StdDraw.setPenColor(StdDraw.BLACK);
-        StdDraw.textRight(760.0, 30.0, "Press 'q' to quit");
+        StdDraw.textRight(735.0, 470.0, "'h' for help");
         //StdDraw.textLeft(20.0, 30.0, "Press 'r' to remove a column");
-        StdDraw.textRight(760.0, 480.0, "Score: " + board.getScore());
-        StdDraw.textLeft(20.0, 480.0, "Cards remaining: " + board.cardsLeft());
+        StdDraw.textLeft(20.0, 458.0, "Score: " + board.getScore());
+        StdDraw.textLeft(20.0, 480.0, "Cards left: " + board.cardsLeft());
         StdDraw.setFont(new Font("Times", Font.PLAIN, 50));
         StdDraw.text(380.0, 480.0, "SET");
         StdDraw.setFont();
         StdDraw.setFont(new Font(StdDraw.getFont().getName(), Font.PLAIN, 18));
-        StdDraw.text(380.0, 15.0, "by Rachel Margulies");
+        StdDraw.text(380.0, 15.0, "Rachel Margulies");
         StdDraw.setFont();
         StdDraw.show(400);
         if (board.falseSet) {
